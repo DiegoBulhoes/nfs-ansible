@@ -1,0 +1,12 @@
+- name: "Install NFS"
+  hosts: nfs
+  become: yes
+  roles:
+    - role: nfs
+      vars:
+        nfs_exports: ["/mnt/volume/  *(rw,root_squash)"]
+        ip_private_storage: "{{hostvars[groups['nfs'][0]]['ansible_default_ipv4']['address']}}"
+        ip_public_storage: "{{groups['nfs'][0]}}"
+        nfs_share_mounts:
+          - path: /mnt/volume/
+            location: "{{hostvars[groups['nfs'][0]]['ansible_default_ipv4']['address']}}:/mnt/volume/"
